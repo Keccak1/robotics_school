@@ -1,0 +1,42 @@
+<launch>
+
+    <rosparam file="$(find models_configs)/cfg/diff_drive.yaml" command="load" />
+
+
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
+        <param name="rate" value="50" />
+    </node>
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="true" output="screen" ns="/differential_drive_model" args="joint_state_controller
+    differential_drive_controller" />
+
+
+    <node name="robot_state_publisher" ns="differential_drive_model" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+        <param name="rate" value="50" />
+        <param name="use_tf_static" value="false"/>
+    </node>
+
+    <arg name="paused" default="false" />
+    <arg name="use_sim_time" default="true" />
+    <arg name="gui" default="true" />
+    <arg name="headless" default="false" />
+    <arg name="debug" default="false" />
+    <arg name="world" default="empty.world"/>
+    <arg name="model" default="$(find gazebo_simulations)/models/urdf/diff_model/diff_model.xacro" />
+
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)" />
+        <arg name="world_name" default="$(arg world)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+        <arg name="headless" value="$(arg headless)" />
+    </include>
+
+
+    <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.06 -unpause -urdf -model differential_drive_model -param robot_description" />
+
+</launch>

@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find gazebo_simulations)/launch/start_differential_model_launch.launch"> 
+        <arg name="world" value="$(find gazebo_simulations)/world/differential_model_rl_world.world" />
+    </include>
+    <node pkg="reinforcement_learning_steering" type="differential_model_rl_node.py" name="differential_model_rl_node"/>
+</launch>

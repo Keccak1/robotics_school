@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find gazebo_simulations)/launch/start_differential_model_launch.launch"> </include>
+    <node pkg="joy_gazebo_controllers" type="differential_drive_model.py" name="joy_formula_diff"/>
+    <node pkg="joy" type="joy_node" name="joy_node"/>
+</launch>

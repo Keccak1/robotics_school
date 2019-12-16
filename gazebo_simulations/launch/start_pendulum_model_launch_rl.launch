@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find gazebo_simulations)/launch/start_pendulum_launch.launch"/>
+    <node pkg="reinforcement_learning_steering" type="pendulum_model_rl_node.py" name="pendulum_model_rl"/>
+
+</launch>

@@ -1,0 +1,2 @@
+Vector3f position
+Vector4f rotation

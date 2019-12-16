@@ -1,0 +1,3 @@
+uint32 episode_iteration
+bool terminate
+RLEpisodeState current_episode

@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="cylinder_inertia" params="origin_xyz origin_rpy mass radius length">
+        <inertial>
+            <mass value="${mass}" />
+            <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+            <inertia ixx="${mass*(3*radius*radius+length*length)/12}" ixy="0.0" ixz="0.0" iyy="${mass*(3*radius*radius+length*length)/12}" iyz="0.0" izz="${mass*radius*radius/2}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="box_inertia" params="origin_xyz origin_rpy mass length width height">
+        <inertial>
+            <mass value="${mass}" />
+            <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+            <inertia ixx="${mass*(width*width+height*height)/12}" ixy="0" ixz="0" iyy="${mass*(length*length+height*height)/12}" iyz="0" izz="${mass*(length*length+height*height)/12}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="dummy_link">
+        <link name="dummy_link"></link>
+    </xacro:macro>
+
+    <xacro:macro name="link_cylinder" params="name origin_xyz origin_rpy mass radius length ">
+        <link name="${name}">
+            <cylinder_inertia origin_xyz="${origin_xyz}" origin_rpy="${origin_rpy}" mass="${mass}" radius="${radius}" length="${length}"/>
+            <collision>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <cylinder radius="${radius}" length="${length}" />
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <cylinder radius="${radius}" length="${length}" />
+                </geometry>
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <xacro:macro name="link_cylinder_mesh" params="name origin_xyz origin_rpy mass radius length mesh_path mesh_scale">
+        <link name="${name}">
+            <cylinder_inertia origin_xyz="${origin_xyz}" origin_rpy="${origin_rpy}" mass="${mass}" radius="${radius}" length="${length}"/>
+            <collision>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <cylinder radius="${radius}" length="${length}" />
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <mesh filename="${mesh_path}" scale="${mesh_scale}"/>
+                </geometry>
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <xacro:macro name="link_box" params="name origin_xyz origin_rpy mass length width height">
+        <link name="${name}">
+            <box_inertia origin_xyz="${origin_xyz}" origin_rpy="${origin_rpy}" mass="${mass}" length="${length}" width="${width}" height="${height}" />
+            <collision>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <box size="${length} ${width} ${height}" />
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <box size="${length} ${width} ${height}" />
+                </geometry>
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <xacro:macro name="link_box_mesh" params="name origin_xyz origin_rpy mass length width height mesh_path scale">
+        <link name="${name}">
+            <box_inertia origin_xyz="${origin_xyz}" origin_rpy="${origin_rpy}" mass="${mass}" length="${length}" width="${width}" height="${height}" />
+            <collision>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <box size="${length} ${width} ${height}" />
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <mesh filename="${mesh_path}" scale="${mesh_scale}"/>
+                </geometry>
+            </visual>
+        </link>
+    </xacro:macro>
+
+</robot>

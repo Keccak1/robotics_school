@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find gazebo_simulations)/models/urdf/links.xacro" />
+    <xacro:include filename="$(find gazebo_simulations)/models/urdf/joints.xacro" />
+    <xacro:include filename="$(find gazebo_simulations)/models/urdf/const.xacro" />
+
+
+    <!-- <xacro:macro name="wheel" params="name origin_xyz mass radius length  base_link joint_xyz mesh_path mesh_scale" > -->
+      <xacro:macro name="wheel" params="name origin_xyz mass radius length  base_link joint_xyz" >
+        <!-- <link_cylinder_mesh name="${name}" origin_xyz="${origin_xyz}" origin_rpy="${PI/2} 0 0 " mass="${mass}" radius="${radius} " length="${length}" mesh_path="${mesh_path}" mesh_scale="${mesh_scale}"/> -->
+        <link_cylinder name="${name}" origin_xyz="${origin_xyz}" origin_rpy="${PI/2} 0 0 " mass="${mass}" radius="${radius} " length="${length}"/>
+        <limits_joint name="${base_link}_${name}_joint" type="continuous" axis_xyz="0 1 0" origin_rpy="0 0 0" origin_xyz="${joint_xyz}" parent_link="${base_link}" child_link="${name}" limit_e="100" limit_l="100" limit_u="10000000" limit_v="10000000" />
+
+        <transmission name="${name}_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="${name}_motor">
+              <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+              <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+            <joint name="${base_link}_${name}_joint">
+              <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            </joint>
+       </transmission>
+
+        <gazebo reference="${name}">
+            <mu1 value="1" />
+            <mu2 value="1" />
+            <kp value="100000.0" />
+            <kd value="1.0" />
+            <material>Gazebo/Black</material>
+
+        </gazebo>
+    </xacro:macro>
+
+
+</robot>

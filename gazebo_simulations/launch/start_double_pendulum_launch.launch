@@ -1,0 +1,22 @@
+<?xml version ="1.0" encoding="UTF-8"?>
+
+<launch>
+
+    <!-- <node name="plugin_manager.py" pkg="simulation_plugins" type="update_plugin" /> -->
+    <!-- set arguments to ros simulation -->
+    <arg name="debug" default="false"/>                                                 <!-- allwos debug information -->
+    <arg name="gui" default="true"/>                                                    <!-- allows open gui platfrom  -->
+    <arg name="pause" default="false"/>                                                  <!-- simulations starts paused, user has to click on start button -->
+    <arg name="world" default="$(find gazebo_simulations)/world/double_pendulum_world.world"/>       <!-- link our world model to gazebo world representaion --> 
+    <arg name="verbose" default="false"/>
+
+    <!-- link arguments to gazebo simulation exes -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">                       <!-- include basic model of world in gazebo-->
+        <arg name="world_name" default="$(arg world)"/>                                 <!-- link our world model -->
+        <arg name="debug" default="$(arg debug)"/>                                      <!-- link debug     arg value -->
+        <arg name="gui" default="$(arg gui)"/>                                          <!-- link gui       arg value -->
+        <arg name="paused" default="$(arg pause)"/>                                     <!-- link pasued    arg value -->
+        <arg name="use_sim_time" default="true"/>                                       <!-- set simulation time -> set -->
+        <arg name="verbose" default="$(arg verbose)"/>
+    </include>
+</launch>    

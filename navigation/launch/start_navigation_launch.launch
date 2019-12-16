@@ -1,0 +1,13 @@
+<launch>
+    <param name="/use_sim_time" value="true"/>
+    <include file="$(find gazebo_simulations)/launch/start_differential_model_launch.launch"></include>
+    <node pkg="tf" type="static_transform_publisher" name="map_tf" args="0 0 0 0 0 0 /map /odom 10"/>
+    <node pkg="map_server" type="map_server" name="map_server" args="/home/marcin/catkin_ws/src/models_configs/cfg/map_server_config.yaml"/>
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find models_configs)/cfg/base_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find models_configs)/cfg/global_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find models_configs)/cfg/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find models_configs)/cfg/navigation_stack.yaml" command="load" />
+    </node>
+
+</launch>

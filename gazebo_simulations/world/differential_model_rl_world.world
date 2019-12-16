@@ -1,0 +1,19 @@
+<?xml version ="1.0" ?>
+<sdf version ="1.5">
+    <world name ="diff_rl_world">
+
+        <include>
+            <uri>model://sun</uri>
+        </include>
+
+        <include>
+            <uri>model://ground_plane</uri>
+        </include>
+
+        <include>
+            <uri>model://beer</uri>
+            <pose>4 0 0 0 0 0</pose>
+        </include>
+        
+    </world>
+</sdf>

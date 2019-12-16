@@ -53,10 +53,6 @@ class DoublePendulumLearningReward(IReinforcementLearningRewardFunction):
         angles = DoublePendulumLearningReward.get_angles(state_msg)
         fp_terminate = abs(angles["first pole"]) > self.max_first_pole_angle
         sp_terminate = abs(angles["second pole"]) > self.max_second_pole_angle
-        if fp_terminate:
-            rospy.logerr(angles["first pole"])
-        if sp_terminate:
-            rospy.logerr(angles["second pole"])
         return fp_terminate or sp_terminate
         
     def terminate_cart_state(self, state_msg):

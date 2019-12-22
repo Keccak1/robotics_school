@@ -46,13 +46,12 @@ differential_drive_model:
     linear:
       x:
         has_velocity_limits: true
-        max_velocity: 1 
+        max_velocity: 1
         has_acceleration_limits: true
-        max_acceleration: 3 
+        max_acceleration: 5
     angular:
       z:
         has_velocity_limits: true
-        max_velocity: 1 
+        max_velocity: 1
         has_acceleration_limits: true
-        max_acceleration: 3
-
+        max_acceleration: 5

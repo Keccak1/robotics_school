@@ -1,11 +1,5 @@
-import time
-import copy
-
 import rospy
-
-from gazebo_msgs.msg import ModelStates
-from geometry_msgs.msg import Pose
-from geometry_msgs.msg import Twist
+from gazebo_msgs.srv import GetWorldProperties
 
 from ireinforcement_learning_reward_function import IReinforcementLearningRewardFunction
 
@@ -20,16 +14,15 @@ class DifferentialModelLearningReward(IReinforcementLearningRewardFunction):
                  time_factor=0.001):
 
         IReinforcementLearningRewardFunction.__init__(self)
-        self.start_time = time.time()
         self.terminate_time = terminate_time
         self.beer_moved_reward = beer_moved_reward
         self.max_distance = max_distance
         self.distance_factor = distance_factor
         self.time_factor = time_factor
         self.collision_min_distance = collision_min_distance
+        self.prev_dist = None
 
     def get_reward(self, state_msg):
-
         elapsed_time_reward = self.get_time_reward()
         distance_reward = self.get_distance_reward(state_msg)
         beer_moved_reward = self.get_collision_reward(state_msg)
@@ -38,9 +31,23 @@ class DifferentialModelLearningReward(IReinforcementLearningRewardFunction):
                                                     distance_reward,
                                                     beer_moved_reward)
 
-        return -1 * (elapsed_time_reward + distance_reward) + beer_moved_reward
+        reward = 0
+        curr_dist = DifferentialModelLearningReward.get_distance(state_msg)
+        if self.collision(state_msg):
+            print 'beer hit'
+            reward = +100
+        else:
+            if self.get_elapsed_time() > self.terminate_time:
+                print 'elapsed time'
+                reward = -10
+            else:
+                if self.prev_dist:
+                    reward = 0.5 * (self.prev_dist - curr_dist)
+        self.prev_dist = curr_dist
+        return reward
 
     def get_time_reward(self):
+        # print 'sim time: {}'.format(self.get_elapsed_time())
         return self.get_elapsed_time() * self.time_factor
 
     def get_distance_reward(self, state_msg):
@@ -56,23 +63,27 @@ class DifferentialModelLearningReward(IReinforcementLearningRewardFunction):
         collision_terminate = self.get_collision_terminate(state_msg)
 
         terminate = elapsed_time_terminate or distance_terminate or collision_terminate
-        if terminate:
-            self.terminate()
-            self.start_time = time.time()
 
+        self.prev_dist = None if terminate else self.prev_dist
         return terminate
 
     def get_elapsed_time_terminate(self):
         return self.get_elapsed_time() > self.terminate_time
 
     def get_elapsed_time(self):
-        return time.time() - self.start_time
+        rospy.wait_for_service('/gazebo/get_world_properties')
+        try:
+            get_sim_time = rospy.ServiceProxy('/gazebo/get_world_properties', GetWorldProperties)
+            resp = get_sim_time()
+        except rospy.ServiceException, e:
+            print("Cannot get world properties.")
+        return resp.sim_time
     
     def get_distance_terminate(self, state_msg):
-        return DifferentialModelLearningReward.get_distance(
-            state_msg) > self.max_distance
+        return DifferentialModelLearningReward.get_distance(state_msg) > self.max_distance
 
     def get_collision_terminate(self, state_msg):
+        # print('collision: {:f}'.format(self.collision(state_msg)))
         return self.collision(state_msg)
 
     @staticmethod

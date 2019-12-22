@@ -35,11 +35,26 @@ class Actor(nn.Module):
         self.fc2.weight.data.uniform_(*hidden_init(self.fc2))
         self.fc3.weight.data.uniform_(-3e-3, 3e-3)
 
+    # def forward(self, state):
+    #     """Build an actor (policy) network that maps states -> actions."""
+    #     x = F.relu(self.fc1(state))
+    #     x = F.relu(self.fc2(x))
+    #     return F.tanh(self.fc3(x))
+
     def forward(self, state):
         """Build an actor (policy) network that maps states -> actions."""
         x = F.relu(self.fc1(state))
         x = F.relu(self.fc2(x))
-        return F.tanh(self.fc3(x))
+        x = self.fc3(x)
+        # print x
+        lin_vel = torch.sigmoid(x[:, 0].view(-1, 1))
+        ang_vel = torch.tanh(x[:, 1].view(-1, 1))
+        # print lin_vel
+        # print ang_vel
+        x = torch.cat((lin_vel, ang_vel), dim=1)
+        # print x
+        # print '---'
+        return x
 
 
 class Critic(nn.Module):

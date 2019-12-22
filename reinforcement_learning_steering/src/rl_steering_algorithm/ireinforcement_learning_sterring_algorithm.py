@@ -11,13 +11,12 @@ class IReinforcementLearningSteeringAlgorithm():
     
     def prepare_next_episode(self, terminate, current_state):
         if terminate:
-            self.reset_simulation()
+            self.reset()
         else:
             self.last_state = current_state
             
-            
     @abstractmethod
-    def reset_simulation(self):
+    def reset(self):
         pass
 
     @abstractmethod

@@ -37,6 +37,6 @@
 
     <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
 
-    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.06 -unpause -urdf -model differential_drive_model -param robot_description" />
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.05 -unpause -urdf -model differential_drive_model -param robot_description" />
 
 </launch>

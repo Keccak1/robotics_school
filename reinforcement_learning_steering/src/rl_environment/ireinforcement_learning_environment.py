@@ -25,14 +25,14 @@ class IReinforcementLearningEnvironment:
         self.rl_pub = rospy.Publisher(robot_namespace + "/rl", RLSimulation, queue_size=1)
 
         self.reset_simulation()
-        # self.unpause_simulation()
+        self.unpause_simulation()
 
     def rl_callback(self, state_msg):
         # self.pause_simulation()
 
         terminate, episode_rl_state = self.reward_function.update(state_msg)
         steering_msg = self.steering_algorithm.steer(state_msg, episode_rl_state, terminate)
-        self.steer_pub.publish(steering_msg)
+        # self.steer_pub.publish(steering_msg)
         self.update_rl_state(episode_rl_state, terminate)
         self.rl_pub.publish(self.return_rl_state())
         

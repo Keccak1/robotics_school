@@ -7,7 +7,7 @@ from gazebo_msgs.msg import ModelStates
 
 if __name__ == "__main__":
     rospy.init_node('rl_diff_model')
-    reward_function = DifferentialModelLearningReward(terminate_time=20,
+    reward_function = DifferentialModelLearningReward(terminate_time=1000,
                                                       beer_moved_reward=300,
                                                       max_distance=10,
                                                       collision_min_distance=0.3,

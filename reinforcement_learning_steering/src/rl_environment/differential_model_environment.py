@@ -3,6 +3,7 @@ import random
 import rospy
 from gazebo_msgs.msg import ModelState
 from gazebo_msgs.srv import SetModelState
+import time
 
 from ireinforcement_learning_environment import IReinforcementLearningEnvironment
 
@@ -28,10 +29,16 @@ class DifferentialModelEnvironment(IReinforcementLearningEnvironment):
 
     def prepare_new_episode(self):
         self.pause_simulation()
+        # print 'pause'
+        # time.sleep(1.0)
         IReinforcementLearningEnvironment.reset_simulation()
+        # print 'reset sim'
+        # time.sleep(1.0)
         self.change_beer_position()
+        # print 'change'
+        time.sleep(2.0)
         self.unpause_simulation()
-
+        print
         self.rl_state.episode_iteration += 1
         self.rl_state.current_episode.iteration = -1
         self.rl_state.current_episode.last_reward = 0
@@ -64,4 +71,5 @@ class DifferentialModelEnvironment(IReinforcementLearningEnvironment):
             y = min_dist
         elif -min_dist < y <= 0:
             y = -min_dist
-        return x, y
+        # return x, y
+        return 1, 0

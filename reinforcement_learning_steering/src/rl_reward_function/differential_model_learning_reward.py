@@ -34,6 +34,7 @@ class DifferentialModelLearningReward(IReinforcementLearningRewardFunction):
         reward = 0
         curr_dist = DifferentialModelLearningReward.get_distance(state_msg)
         if self.collision(state_msg):
+            print 'beer <-> model dist:', DifferentialModelLearningReward.get_distance(state_msg)
             print 'beer hit'
             reward = +100
         else:

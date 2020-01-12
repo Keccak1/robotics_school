@@ -47,8 +47,8 @@ class DiffModelSteering(IReinforcementLearningSteeringAlgorithm):
         self.last_state = np.zeros(self.observation_space_dim, dtype=np.float32)
         
     def update_steering_msg(self, action):
-        self.steering_msg.linear.x = action[0, 0]
-        self.steering_msg.angular.z = action[0, 1]
+        self.steering_msg.linear.x = action[0]
+        self.steering_msg.angular.z = action[1]
 
     @staticmethod
     def get_network_input(state_msg):
@@ -62,7 +62,7 @@ class DiffModelSteering(IReinforcementLearningSteeringAlgorithm):
         # print '{:f}, {:f}'.format(model_vel_x, model_vel_ang_z)
         # print '{}\n'.format(state_msg.twist[indexes["model"]])
         # print '{:f}, {:f}, {:f}, {:f}'.format(model_vel_x, model_vel_ang_z, beer_x - model_x, beer_y - model_y)
-        return np.array([[model_vel_x, model_vel_ang_z, beer_x - model_x, beer_y - model_y]], dtype=np.float32)
+        return np.array([model_vel_x, model_vel_ang_z, beer_x - model_x, beer_y - model_y], dtype=np.float32)
 
     @staticmethod
     def get_indexes(state_msg):
